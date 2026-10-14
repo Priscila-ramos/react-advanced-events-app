@@ -163,7 +163,14 @@ export const EventPage = () => {
              <Button 
              bg="red.500"
              color="white"
-             onClick={handleDelete}>Delete</Button>
+             onClick={() => {
+                if (window.confirm("Are you sure you want to delete this event?")) {
+                    handleDelete();
+                }
+            }}
+            
+                    >Delete
+            </Button>
 
              </HStack>
 
