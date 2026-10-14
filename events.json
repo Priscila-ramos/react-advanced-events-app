@@ -1,0 +1,112 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Michael Turner",
+      "image": "https://wincacademy.github.io/webpages/media/person6.jpeg"
+    },
+    {
+      "id": 2,
+      "name": "Sophia Collins",
+      "image": "https://wincacademy.github.io/webpages/media/article-author.png"
+    },
+    {
+      "id": 3,
+      "name": "Emily Carter",
+      "image": "https://wincacademy.github.io/webpages/media/person9.jpeg"
+    }
+  ],
+  "events": [
+    {
+      "id": 5,
+      "createdBy": 2,
+      "title": "Tennis",
+      "description": "Serving up fun on the court.",
+      "image": "https://wincacademy.github.io/webpages/media/pexels-floriandoppler-3207474.jpg",
+      "categoryIds": [
+        1
+      ],
+      "location": "Grand Slam Tennis Court",
+      "startTime": "2023-03-09T08:00:00.000Z",
+      "endTime": "2023-03-09T10:00:00.000Z"
+    },
+    {
+      "id": 6,
+      "createdBy": 5,
+      "title": "Board games night",
+      "description": "Roll the dice and join the fun!",
+      "image": "https://wincacademy.github.io/webpages/media/pexels-tima-miroshnichenko-6598746.jpg",
+      "categoryIds": [
+        2
+      ],
+      "location": "Community Hall",
+      "startTime": "2023-03-13T18:00:00.000Z",
+      "endTime": "2023-03-13T21:00:00.000Z"
+    },
+    {
+      "id": 7,
+      "createdBy": 2,
+      "title": "Tea tasting",
+      "description": "Savor the soothing flavors of herbal teas.",
+      "image": "https://wincacademy.github.io/webpages/media/pexels-viktoria-alipatova-1083711-2130137.jpg",
+      "categoryIds": [
+        3
+      ],
+      "location": "Cozy Tea House",
+      "startTime": "2023-03-17T15:00:00.000Z",
+      "endTime": "2023-03-17T17:00:00.000Z"
+    },
+    {
+      "id": 8,
+      "createdBy": 6,
+      "title": "Nature walk",
+      "description": "Connect with nature and clear your mind.",
+      "image": "https://wincacademy.github.io/webpages/media/hiking.png",
+      "categoryIds": [
+        3
+      ],
+      "location": "Forest Trailhead",
+      "startTime": "2023-03-16T07:00:00.000Z",
+      "endTime": "2023-03-16T09:30:00.000Z"
+    },
+    {
+      "id": 9,
+      "createdBy": 3,
+      "title": "Bowling night",
+      "description": "Strike up some fun with friends at the lanes!",
+      "image": "https://wincacademy.github.io/webpages/media/pexels-rnnzeravac-9273055.jpg",
+      "categoryIds": [
+        2
+      ],
+      "location": "Downtown Bowling Alley",
+      "startTime": "2023-03-19T18:00:00.000Z",
+      "endTime": "2023-03-19T21:00:00.000Z"
+    },
+    {
+      "title": "Yoga",
+      "description": "A little bit of stretch.",
+      "image": "https://wincacademy.github.io/webpages/media/pexels-gabby-k-5384538.jpg",
+      "location": "Netherlands",
+      "startTime": "2026-10-07T15:40",
+      "endTime": "2026-10-07T16:40",
+      "categoryIds": [
+        3
+      ],
+      "id": 10
+    }
+  ],
+  "categories": [
+    {
+      "name": "sports",
+      "id": 1
+    },
+    {
+      "name": "games",
+      "id": 2
+    },
+    {
+      "name": "relaxation",
+      "id": 3
+    }
+  ]
+}
