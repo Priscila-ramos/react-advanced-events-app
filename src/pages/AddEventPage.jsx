@@ -1,9 +1,35 @@
 import { useNavigate } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import { EventsContext } from "../context/EventsContext";
 import { toaster } from "../toaster";
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, SimpleGrid } from "@chakra-ui/react";
 
 export const AddEventPage = () => {
     const navigate = useNavigate();
+
+    const { categories, setCategories }= useContext(EventsContext);
+
+    useEffect(() => {
+        const getCategories = async () => {
+            try {
+                const response = await fetch("http://localhost:3000/categories");
+
+                if (!response.ok) {
+                    throw new Error("Failed to load categories");
+                }
+
+                const data= await response.json();
+
+                setCategories(data);
+            } catch (error) {
+
+                console.error("Failed to load categories:", error);
+                }
+            };
+
+            getCategories(); }, [setCategories]);
+        
+    
 
     const handleSubmit = async (event) => {
 
@@ -13,7 +39,7 @@ export const AddEventPage = () => {
         
 
         const newEvent = Object.fromEntries(formData);
-        newEvent.categoryIds = [];
+        newEvent.categoryIds = formData.getAll("categoryIds").map(Number);
         const response = await fetch("http://localhost:3000/events", { 
             method: "POST",
             headers: {
@@ -74,7 +100,9 @@ export const AddEventPage = () => {
             display: "flex",
             flexDirection: "column",
             gap: "12px",
-            maxWidth: "100%",
+            maxWidth: "1000px",
+            width: "100%",
+            margin: "0 auto",
             "& label": {
                 display: "flex",
                 flexDirection: "column",
@@ -92,6 +120,11 @@ export const AddEventPage = () => {
 
         }}
          
+         >
+
+         <SimpleGrid columns={{ base:1, md: 2 }}
+         gap={5}
+         w="100%"
          >
 
             <label>Title
@@ -139,9 +172,38 @@ export const AddEventPage = () => {
                    name="endTime"
                    required/> 
             </label>
+         
+         </SimpleGrid>
+
+            <Box>
+             <p>Categories:</p>
+             
+
+             {categories.map((category) => (
+                <label key={category.id}style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent:"flex-start",
+                    gap: "10px",
+                }}
+                >
+                    <input
+                    type="checkbox"
+                    name="categoryIds"
+                    value={category.id}
+                    />
+                    {category.name}
+                </label>
+             ))}
+
+            </Box>
+
 
             <Button
             type="submit"
+            w="200px"
+            alignSelf="center"
             bg="purple.500"
             color="white"
             fontSize="lg"

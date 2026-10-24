@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
-import { Heading, Input, Button, Skeleton, HStack, Box } from '@chakra-ui/react';
+import { Heading, Input, Button, Skeleton, HStack, Box, SimpleGrid } from '@chakra-ui/react';
 import { Link } from "react-router-dom";
 import { EventsContext } from "../context/EventsContext";
 
@@ -62,8 +62,25 @@ export const EventsPage = () => {
 
     return (
         <>
-         <Heading>List of events</Heading>
-         {isLoading && <Skeleton height="100px" />}
+         <Heading textAlign="center"
+                  mb={8}
+                  fontSize={{ base: "28px", md: "36px", lg: "48px"}}
+                  color="blue.400">List of events
+                  </Heading>
+
+         {isLoading && (<SimpleGrid columns={{ base: 1, md: 2, xl: 3 }}
+                                gap={5}
+                                maxW="1400px"
+                                mx="auto"
+                                mt={4}> {[1, 2, 3, 4, 5, 6].map ((item) => (
+                                    <Skeleton key={item}
+                                    
+                                 height="350px" 
+                                 borderRadius= "lg"
+                                 />
+                                ))}
+                                </SimpleGrid>
+    )}
 
          <Input
          id="search-events"
@@ -71,14 +88,20 @@ export const EventsPage = () => {
          value={searchTerm}
          onChange={(event) => setSearchTerm(event.target.value)}
          borderWidth="2px"
-         borderColor="yellow.500"
+         borderColor="red.500"
          borderRadius="md"
          mb={4}
+         maxW="500px"
+         w="100%"
+         display="block"
+         mx="auto"
          _placeholder={{ color: "white"}}
          />
 
-        <HStack gap={3}
-        flexWrap="wrap">
+        <HStack gap={6}
+        flexWrap="wrap"
+        justify="center"
+        >
 
          {categories.map((category) => (
             <Button 
@@ -96,6 +119,24 @@ export const EventsPage = () => {
          ))}
          </HStack>
 
+         <SimpleGrid columns={{ base: 1, md: 2, xl: 3}} 
+                     gap={5}
+                     maxW="1400px"
+                     mx="auto"
+                     justifyItems={{ base: "center", md: "stretch" }}
+                     >
+        
+
+        {!isLoading && filteredEvents.length === 0 && (
+             <Box color="white"
+                  fontSize="lg"
+                  mt={4}
+                >
+                    No events found.
+                </Box>
+                )}
+
+
          {!isLoading && filteredEvents.map((event) => (
             <Box key={event.id}
             bg="black.500"
@@ -105,14 +146,25 @@ export const EventsPage = () => {
             p={4}
             mb={5}
             mt={4}
-            maxWidth="550px"
+           
              >
                 <Link to={`/event/${event.id}`}>
                 <Box as="p" fontSize="xl"
                             fontWeight="bold"
-                            color="blue.400"
+                            color="white"
                             mt={-2}
                             mb={2}
+                            bg="blue.600"
+                            px={4}
+                            py={2}
+                            borderRadius={"md"}
+                            w="fit-content"
+                            cursor="pointer"
+                            transition="all 0.2s"
+                            _hover={{
+                                bg: "blue.400",
+                                transform: "translateY(-2px)",
+                            }}
                             >
                         {event.title}
                         </Box>
@@ -125,7 +177,7 @@ export const EventsPage = () => {
 
                 <img src={event.image} alt={event.title}
                 style={{ width: "100%",
-                         maxWidth: "500px",
+                         maxWidth: "700px",
                          aspectRatio: "4 / 3",
                          objectFit: "cover",
                          border: "3px solid #3182CE",
@@ -184,6 +236,9 @@ export const EventsPage = () => {
             
             </Box>
          ))}
+
+         </SimpleGrid>
+
         </>
        
     );

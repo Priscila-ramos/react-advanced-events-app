@@ -1,8 +1,22 @@
 import { useEffect, useState, useContext } from "react";
-import { Button, Heading, Dialog, Box, HStack } from '@chakra-ui/react';
+import { Button, Heading, Dialog, Box, HStack, Skeleton } from '@chakra-ui/react';
 import { useParams, useNavigate } from "react-router-dom";
 import { EventsContext } from "../context/EventsContext";
 import { toaster } from "../toaster";
+
+const formatDateTimeLocal= (date) => {
+    const parts = new Intl.DateTimeFormat("sv-SE", {
+        timeZone: "Europe/Amsterdam",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hourCycle: "h23",
+    }).format(new Date(date));
+
+    return parts.replace(" ", "T");
+};
 
 export const EventPage = () => {
     const { eventId }= useParams();
@@ -44,9 +58,9 @@ export const EventPage = () => {
                  title: formData.get("title"),
                  description: formData.get("description"),
                  image: formData.get("image"),
-                 startTime: formData.get("startTime"),
-                 endTime: formData.get("endTime"),
-                 categoryIds: [Number(formData.get("categoryId"))],
+                 startTime: new Date(formData.get("startTime")).toISOString(),
+                 endTime: new Date(formData.get("endTime")).toISOString(),
+                 categoryIds: formData.getAll("categoryIds").map(Number),
             
                 
             };
@@ -130,31 +144,72 @@ export const EventPage = () => {
         };
 
         if (!event) {
-            return <p>Loading...</p>
-        }
+        return (
+       <Box maxW="700px" mx="auto" mt={8} p={4}>
+      <Skeleton height="40px" mb={4} borderRadius="md" />
+      <Skeleton height="350px" mb={4} borderRadius="lg" />
+      <Skeleton height="80px" borderRadius="md" />
+    </Box>
+  );
+}
 
         return (
-            <>
-             <Heading>{event.title}</Heading>
+            <Box maxW="600px"
+            mx="auto"
+            px={4}
+                textAlign="center"
+                >
+             <Heading color="#60A5FA">{event.title}</Heading>
 
              <p>{event.description}</p>
 
              <img src={event.image} alt={event.title}
-             style={{
-                maxWidth: "100%", height: "auto" }}
+             style={{ width: "100%",
+                maxWidth: "600px", 
+                maxHeight: "350px",
+                objectFit: "contain",
+                marginTop: "15px",
+                marginBottom: "20px",
+                border: "3px solid #3182CE",
+                borderRadius:"12px",
+                boxSizing:"border-box" }}
                 />
 
-             <p>{event.startTime}</p>
+             <p>
+                <strong style={{ color:"#60A5FA" }}>Starts: </strong>
+                {new Date(event.startTime).toLocaleString("pt-BR",
+                    { timeZone: "Europe/Amsterdam",
+                      dateStyle: "short",
+                      timeStyle: "short",  
+                    })}
+                </p>
 
-             <p>{event.endTime}</p>
+             <p>
+                <strong style={{ color:"#60A5FA" }}>Ends: </strong>
+                {new Date(event.endTime).toLocaleString("pt-BR",
+                    { timeZone: "Europe/Amsterdam",
+                      dateStyle: "short",
+                      timeStyle: "short",  
+                    })}
+                </p>
 
              {event.categoryIds.map((categoryId) => {
                 const category = categories.find((category) =>
                 category.id === categoryId);
 
-                return <p key={categoryId}>{category?.name}</p>;
+                return ( <p key={categoryId}>
+                         <strong style={{ color:"#60A5FA" }}>
+                Category:{" "}
+                 </strong>
+                 {category?.name}
+                </p>
+             );
              })}
-             <HStack gap={3}>
+
+             <HStack gap={3}
+             justify="center"
+             mt={5}
+             >
              <Button
              bg="blue.500"
              color="white"
@@ -229,32 +284,44 @@ export const EventPage = () => {
                defaultValue={event.image}
                required/>
 
-               <input type="text"
+               <input type="datetime-local"
                       name="startTime"
 
-               defaultValue={event.startTime}
+               defaultValue={formatDateTimeLocal(event.startTime)}
                required/>
 
-                <input type="text"
+                <input type="datetime-local"
                        name="endTime"
 
-               defaultValue={event.endTime}
+               defaultValue={formatDateTimeLocal(event.endTime)}
                required/>
 
-               <select
-               name="categoryId"
+              <Box>
+  <p>Categories:</p>
 
-               defaultValue={event.categoryIds[0]}
-               required>
-
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                {category.name}
-
-                </option>
-              ))}
-
-               </select>
+  {categories.map((category) => (
+    <label
+      key={category.id}
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        gap: "10px",
+        justifyContent:"flex-start",
+        width: "fit-content",
+        marginBottom:"8px",
+      }}
+    >
+      <input
+        type="checkbox"
+        name="categoryIds"
+        value={category.id}
+        defaultChecked={event.categoryIds.includes(category.id)}
+      />
+      {category.name}
+    </label>
+  ))}
+</Box>
 
                <Button 
                type="submit"
@@ -278,7 +345,7 @@ export const EventPage = () => {
             </Dialog.Positioner>
             </Dialog.Root>
 
-            </>
+            </Box>
        
     );
 };
